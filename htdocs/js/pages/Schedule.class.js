@@ -63,6 +63,7 @@ Class.subclass( Page.Base, "Page.Schedule", {
 			'Target', 
 			'Timing', 
 			'Status', 
+			'Last Job',
 			'Actions'
 		];
 		
@@ -165,9 +166,17 @@ Class.subclass( Page.Base, "Page.Schedule", {
 			
 			// var jobs = find_objects( app.activeJobs, { event: item.id } );
 			var status_html = 'n/a';
+			var last_job_html = '';
 			if (app.state.jobCodes && (item.id in app.state.jobCodes)) {
 				var last_code = app.state.jobCodes[ item.id ];
 				status_html = last_code ? '<span class="color_label red clicky"><i class="fa fa-warning">&nbsp;</i>Error</span>' : '<span class="color_label green clicky"><i class="fa fa-check">&nbsp;</i>Success</span>';
+			}
+			
+			if (app.state.jobStats && (item.id in app.state.jobStats)) {
+				var stats = app.state.jobStats[ item.id ];
+				var dargs_start = get_date_args( stats.time_start );
+				var dargs_end = get_date_args( stats.time_end );
+				last_job_html = dargs_start.yyyy_mm_dd + ' ' + dargs_start.hh_mi_ss + ' / ' + dargs_end.yyyy_mm_dd + ' ' + dargs_end.hh_mi_ss;
 			}
 			
 			if (group && item.multiplex) {
@@ -186,6 +195,7 @@ Class.subclass( Page.Base, "Page.Schedule", {
 				self.getNiceGroup( group, item.target, col_width ),
 				summarize_event_timing( item.timing, item.timezone ),
 				'<span id="ss_' + item.id + '" onMouseUp="$P().jump_to_last_job('+idx+')">' + status_html + '</span>',
+				'<span id="lj_' + item.id + '">' + last_job_html + '</span>',
 				actions.join('&nbsp;|&nbsp;')
 			];
 			
@@ -257,6 +267,16 @@ Class.subclass( Page.Base, "Page.Schedule", {
 				var last_code = app.state.jobCodes[event_id];
 				var status_html = last_code ? '<span class="color_label red clicky"><i class="fa fa-warning">&nbsp;</i>Error</span>' : '<span class="color_label green clicky"><i class="fa fa-check">&nbsp;</i>Success</span>';
 				this.div.find('#ss_' + event_id).html( status_html );
+			}
+		}
+		
+		if (app.state.jobStats) {
+			for (var event_id in app.state.jobStats) {
+				var stats = app.state.jobStats[event_id];
+				var dargs_start = get_date_args( stats.time_start );
+				var dargs_end = get_date_args( stats.time_end );
+				var last_job_html = dargs_start.yyyy_mm_dd + ' ' + dargs_start.hh_mi_ss + ' / ' + dargs_end.yyyy_mm_dd + ' ' + dargs_end.hh_mi_ss;
+				this.div.find('#lj_' + event_id).html( last_job_html );
 			}
 		}
 	},
