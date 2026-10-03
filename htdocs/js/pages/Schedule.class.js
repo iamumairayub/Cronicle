@@ -176,7 +176,7 @@ Class.subclass( Page.Base, "Page.Schedule", {
 				var stats = app.state.jobStats[ item.id ];
 				var dargs_start = get_date_args( stats.time_start );
 				var dargs_end = get_date_args( stats.time_end );
-				last_job_html = dargs_start.yyyy_mm_dd + ' ' + dargs_start.hh_mi_ss + ' / ' + dargs_end.yyyy_mm_dd + ' ' + dargs_end.hh_mi_ss;
+				last_job_html = 'Start: ' + dargs_start.yyyy_mm_dd + ' ' + dargs_start.hh_mi_ss + '<br/>End: ' + dargs_end.yyyy_mm_dd + ' ' + dargs_end.hh_mi_ss;
 			}
 			
 			if (group && item.multiplex) {
@@ -275,7 +275,7 @@ Class.subclass( Page.Base, "Page.Schedule", {
 				var stats = app.state.jobStats[event_id];
 				var dargs_start = get_date_args( stats.time_start );
 				var dargs_end = get_date_args( stats.time_end );
-				var last_job_html = dargs_start.yyyy_mm_dd + ' ' + dargs_start.hh_mi_ss + ' / ' + dargs_end.yyyy_mm_dd + ' ' + dargs_end.hh_mi_ss;
+				var last_job_html = 'Start: ' + dargs_start.yyyy_mm_dd + ' ' + dargs_start.hh_mi_ss + '<br/>End: ' + dargs_end.yyyy_mm_dd + ' ' + dargs_end.hh_mi_ss;
 				this.div.find('#lj_' + event_id).html( last_job_html );
 			}
 		}
